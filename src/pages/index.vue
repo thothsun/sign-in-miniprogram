@@ -39,7 +39,31 @@
     methods: {
       onGotUserInfo(e) {
         console.log(e.mp.detail.signature)
+        this.scanCodeSignIn()
       },
+      scanCodeSignIn() {
+        // 只允许从相机扫码
+        wx.scanCode({
+          onlyFromCamera: true,
+          success(res) {
+            console.log(res)
+          }
+        })
+      },
+      onSignInSuccess() {
+        wx.showToast({
+          title: '签到成功',
+          icon: 'success',
+          duration: 2000
+        })
+      },
+      onSignInFailed() {
+        wx.showToast({
+          title: '已签到，不能重复签到',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     },
 
 
