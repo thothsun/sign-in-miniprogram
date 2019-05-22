@@ -53,8 +53,15 @@
             duration: 2000
           })
         } else {
+          this.saveUserInfo();
           this.showWarn()
         }
+      },
+      saveUserInfo() {
+        wx.clearStorageSync();
+        wx.setStorageSync('input_id', this.input_id);
+        wx.setStorageSync('input_name', this.input_name)
+        console.log('缓存完成')
       },
       showWarn() {
         wx.showModal({
@@ -97,7 +104,8 @@
           }
         })
       },
-      // TODO 1。ssl证书重新绑定二级域名  2。后台设置安全域名  3。修改网络请求回调函数
+      // TODO 2。解析唯一id
+      // TODO 1。ssl证书重新绑定二级域名  2。后台设置安全域名  3。修改网络请求回调函数  4。重复、失败、成功
       onSignInSuccess() {
         wx.showToast({
           title: '签到成功',
@@ -106,6 +114,13 @@
         })
       },
       onSignInFailed() {
+        wx.showToast({
+          title: '签到失败，网络异常',
+          icon: 'none',
+          duration: 2000
+        })
+      },
+      onSignInRepeated() {
         wx.showToast({
           title: '已签到，不能重复签到',
           icon: 'none',
@@ -116,7 +131,8 @@
 
 
     created() {
-
+      this.input_id = wx.getStorageSync('input_id');
+      this.input_name = wx.getStorageSync('input_name');
     }
   }
 </script>
