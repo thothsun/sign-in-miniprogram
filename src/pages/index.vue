@@ -14,12 +14,15 @@
       </div>
 
 
+      <p>{{openid}}</p>
+
+
     </view>
 
 
     <view>
-      <button type="primary" open-type="getUserInfo" lang="zh_CN" style="margin-top: 20px;"
-              @getuserinfo="onGotUserInfo">签到
+      <button type="primary" @click="getUserOpenId" lang="zh_CN" style="margin-top: 20px;"
+              >签到
       </button>
     </view>
 
@@ -36,13 +39,29 @@
       return {
         input_id: null,
         input_name: null,
-
+        openid:null
       }
     },
 
     components: {},
 
     methods: {
+      getUserOpenId(){
+        wx.login({
+          success: function(res) {
+            wx.request({
+              url: 'https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code='+ res.code +'&grant_type=authorization_code',
+              data: {},
+              header: {
+                'content-type': 'application/json'
+              },
+              success: function(res) {
+                this.openid = res.data.openid
+              }
+            })
+          }
+        })
+      },
       onGotUserInfo(e) {
         console.log(e.mp);
         console.log(e.mp.detail.signature);
@@ -104,7 +123,7 @@
           }
         })
       },
-      // TODO 2。解析唯一id
+      // TODO 2.获取openid
       // TODO 1。ssl证书重新绑定二级域名  2。后台设置安全域名  3。修改网络请求回调函数  4。重复、失败、成功
       onSignInSuccess() {
         wx.showToast({
