@@ -40,8 +40,7 @@
       }
     },
 
-    components: {
-    },
+    components: {},
 
     methods: {
       onGotUserInfo(e) {
@@ -75,11 +74,30 @@
         // 只允许从相机扫码
         wx.scanCode({
           onlyFromCamera: true,
-          success(res) {
-            console.log(res)
+          success: res => {
+            console.log(res.result);
+
+            wx.request({
+              url: res.result,
+              data: {
+                stu_id: this.input_id,
+                stu_name: this.input_name
+              },
+              header: {
+                'content-type': 'application/json' // 默认值
+              },
+              success: res => {
+                this.onSignInSuccess();
+                console.log(res.data)
+              },
+              fail: res => {
+                this.onSignInFailed();
+              }
+            })
           }
         })
       },
+      // TODO 1。ssl证书重新绑定二级域名  2。后台设置安全域名  3。修改网络请求回调函数
       onSignInSuccess() {
         wx.showToast({
           title: '签到成功',
