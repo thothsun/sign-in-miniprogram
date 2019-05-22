@@ -39,7 +39,7 @@
       return {
         input_id: null,
         input_name: null,
-        openid:null
+        // openid:null
       }
     },
 
@@ -50,13 +50,16 @@
         wx.login({
           success: function(res) {
             wx.request({
-              url: 'https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code='+ res.code +'&grant_type=authorization_code',
-              data: {},
+              url: 'https://api.ai-developer.net/wechat/openid',
+              data: {
+                code:res.code
+              },
               header: {
                 'content-type': 'application/json'
               },
               success: function(res) {
-                this.openid = res.data.openid
+                console.log(res.data.data.openid);
+                this.openid = res.data.data.openid
               }
             })
           }
@@ -123,7 +126,6 @@
           }
         })
       },
-      // TODO 2.获取openid
       // TODO 1。ssl证书重新绑定二级域名  2。后台设置安全域名  3。修改网络请求回调函数  4。重复、失败、成功
       onSignInSuccess() {
         wx.showToast({
