@@ -117,7 +117,8 @@
               url: res.result,
               data: {
                 stuID: this.input_id,
-                stuName: this.input_name
+                stuName: this.input_name,
+                openid: this.openid
               },
               header: {
                 'content-type': 'application/json' // 默认值
